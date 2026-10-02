@@ -1,0 +1,20 @@
+<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Murmur — flocking studies</title></head><body>
+<header><a class="brand" href="./">murmur<span> / 001</span></a><span>A STUDY IN COLLECTIVE MOTION</span><span class="live">● LIVE SYSTEM</span></header>
+<main><section class="art"><div class="title"><div class="eyebrow">COMPUTATIONAL FIELD NOTES</div><h1>A thousand birds.<br>One quiet choreography.</h1></div><canvas aria-label="Live flocking simulation"></canvas><div class="caption"><span>FIG. 01 — EMERGENT FLIGHT</span><span id="metrics">1,000 BIRDS</span></div></section>
+<aside><div class="eyebrow">THE FLOCK</div><p class="intro">Small decisions.<br>Extraordinary patterns.</p><p class="description">Each bird follows its neighbours. No leader, no prescribed path.</p>
+<div class="actions"><button id="pause">Pause</button><button id="reset">New flock ↗</button></div>
+<label>Population <output id="count-value">1,000</output><input id="count" type="range" min="100" max="10000" step="100" value="1000"></label>
+<label>Alignment <output id="alignment-value">1.00</output><input id="alignment" type="range" min="0" max="2" step=".05" value="1"></label>
+<label>Cohesion <output id="cohesion-value">1.00</output><input id="cohesion" type="range" min="0" max="2" step=".05" value="1"></label>
+<label>Separation <output id="separation-value">1.00</output><input id="separation" type="range" min="0" max="2" step=".05" value="1"></label>
+<label>Flight speed <output id="speed-value">1.00×</output><input id="speed" type="range" min=".25" max="2" step=".05" value="1"></label>
+<label>Bird size <output id="size-value">4.00</output><input id="size" type="range" min="2" max="8" step=".25" value="4"></label>
+<div class="colors"><label>Sky<input id="background" type="color" value="#e8ece7"></label><label>Birds<input id="birds" type="color" value="#263c35"></label></div>
+<div class="trail-controls">
+<label class="check-label"><input id="trails" type="checkbox"> Leave a trace</label>
+<div id="trail-settings" hidden>
+<div class="colors"><label>Trace colour<input id="traceColor" type="color" value="#789489"></label></div>
+<label>Line persistence <output id="persistence-value">3.0 s</output><input id="persistence" type="range" min="0.5" max="10" step="0.5" value="3"></label>
+</div></div>
+<details><summary>Render a film <span>＋</span></summary><p class="description">Starts from this moment. Frame-by-frame rendering, with no dropped frames.</p><div class="export-grid"><label>Seconds<input id="duration" type="number" min="1" max="60" value="10"></label><label>Frame rate<select id="fps"><option>24</option><option>30</option><option selected>60</option></select></label><label>Resolution<select id="resolution"><option value="1280">1280 × 800</option><option value="1920" selected>1920 × 1200</option><option value="2560">2560 × 1600</option><option value="3840">3840 × 2400</option></select></label><label>Format<select id="format"><option value="mp4">MP4 / H.264</option><option value="webm">WebM</option></select></label></div><button id="export">Render video ↗</button><button id="cancel" hidden>Cancel render</button><progress id="progress" max="1" value="0" hidden></progress><p id="export-status" role="status"></p><a id="download" hidden>Download video ↓</a></details>
+</aside></main><footer><span>SEPARATION / ALIGNMENT / COHESION</span><span>LOCAL RULES. LIVING GEOMETRY.</span></footer><script type="module" src="/src/main.js"></script></body></html>
