@@ -11,6 +11,8 @@ export function renderScene(canvas, scene, style) {
     const x=scene.x[i],y=scene.y[i],v=Math.hypot(scene.vx[i],scene.vy[i]),ux=scene.vx[i]/v,uy=scene.vy[i]/v;
     const s=style.size,wing=s*.46;
     ctx.moveTo(x+ux*s,y+uy*s);ctx.lineTo(x-ux*s*.65-uy*wing,y-uy*s*.65+ux*wing);ctx.lineTo(x-ux*s*.65+uy*wing,y-uy*s*.65-ux*wing);ctx.closePath();
+    // Limit path complexity: a single huge path is costly to tessellate.
+    if((i+1)%128===0){ctx.fill();ctx.beginPath();}
   }
   ctx.fill();ctx.restore();
 }

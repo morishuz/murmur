@@ -1,0 +1,27 @@
+{
+  "date":"2026-10-02",
+  "browser":"Codex in-app Chromium 154 on macOS",
+  "resolution":[1600,1000],
+  "cpuFallback":{
+    "method":"Same short-run workload as baseline.json, after bounded Canvas path batching; no readback.",
+    "rows":[
+      {"birds":1000,"trails":false,"drawMeanMs":0.586,"frameIntervalMeanMs":16.677,"frameIntervalP95Ms":17.5},
+      {"birds":1000,"trails":true,"drawMeanMs":0.742,"frameIntervalMeanMs":16.675,"frameIntervalP95Ms":17.0},
+      {"birds":3000,"trails":false,"drawMeanMs":1.242,"frameIntervalMeanMs":16.674,"frameIntervalP95Ms":17.0},
+      {"birds":3000,"trails":true,"drawMeanMs":1.322,"frameIntervalMeanMs":16.674,"frameIntervalP95Ms":16.8},
+      {"birds":10000,"trails":false,"drawMeanMs":3.253,"frameIntervalMeanMs":28.872,"frameIntervalP95Ms":51.0},
+      {"birds":10000,"trails":true,"drawMeanMs":3.547,"frameIntervalMeanMs":28.183,"frameIntervalP95Ms":50.2}
+    ]
+  },
+  "gpu":{
+    "method":"10 simulation seconds of settling, then 60 animation warmup frames and 120 samples. Two fixed 1/120 steps per frame. Await queue.onSubmittedWorkDone every frame: measured work includes GPU completion, not only submission. The live app was also running in another tab; these are local observations, not hardware-independent guarantees.",
+    "rows":[
+      {"birds":1000,"trails":false,"completedWorkMeanMs":2.547,"completedWorkP95Ms":5.8,"completedWorkMaxMs":22.3,"frameIntervalMeanMs":16.584,"frameIntervalP95Ms":17.8},
+      {"birds":1000,"trails":true,"completedWorkMeanMs":3.395,"completedWorkP95Ms":4.2,"completedWorkMaxMs":4.8,"frameIntervalMeanMs":16.673,"frameIntervalP95Ms":17.7},
+      {"birds":3000,"trails":false,"completedWorkMeanMs":3.151,"completedWorkP95Ms":4.0,"completedWorkMaxMs":5.1,"frameIntervalMeanMs":16.682,"frameIntervalP95Ms":17.7},
+      {"birds":3000,"trails":true,"completedWorkMeanMs":3.530,"completedWorkP95Ms":4.2,"completedWorkMaxMs":5.0,"frameIntervalMeanMs":16.677,"frameIntervalP95Ms":17.7},
+      {"birds":10000,"trails":false,"completedWorkMeanMs":4.809,"completedWorkP95Ms":8.2,"completedWorkMaxMs":8.6,"frameIntervalMeanMs":16.679,"frameIntervalP95Ms":17.6},
+      {"birds":10000,"trails":true,"completedWorkMeanMs":5.227,"completedWorkP95Ms":8.0,"completedWorkMaxMs":8.5,"frameIntervalMeanMs":16.673,"frameIntervalP95Ms":17.7}
+    ]
+  }
+}

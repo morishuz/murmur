@@ -40,6 +40,7 @@ export function renderTrails(canvas,scene,style,scale) {
     ctx.strokeStyle=style.traceColor;ctx.lineWidth=.65;ctx.beginPath();
     for(let i=0;i<scene.count;i++) {
       ctx.moveTo(layer.x[i],layer.y[i]);ctx.lineTo(scene.x[i],scene.y[i]);
+      if((i+1)%128===0){ctx.stroke();ctx.beginPath();}
     }
     ctx.stroke();layer.x.set(scene.x);layer.y.set(scene.y);layer.time=scene.time;
   }

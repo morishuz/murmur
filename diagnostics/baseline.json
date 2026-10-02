@@ -1,0 +1,14 @@
+{
+  "date": "2026-10-02",
+  "browser": "Codex in-app Chromium 154 on macOS",
+  "resolution": [1600,1000],
+  "method": "Fixed 2 simulation steps per animation frame, 60 warmup frames, 120 measured frames, no canvas readback. CPU baseline before bounded path batching. Short-run timings include early flock evolution, not worst-case density.",
+  "rows": [
+    {"birds":1000,"trails":false,"physicsMeanMs":0.873,"drawMeanMs":2.600,"frameIntervalMeanMs":16.674,"frameIntervalP95Ms":17.4},
+    {"birds":1000,"trails":true,"physicsMeanMs":0.934,"drawMeanMs":2.992,"frameIntervalMeanMs":16.673,"frameIntervalP95Ms":17.6},
+    {"birds":3000,"trails":false,"physicsMeanMs":3.046,"drawMeanMs":17.910,"frameIntervalMeanMs":21.165,"frameIntervalP95Ms":24.4},
+    {"birds":3000,"trails":true,"physicsMeanMs":3.038,"drawMeanMs":17.978,"frameIntervalMeanMs":21.227,"frameIntervalP95Ms":24.5},
+    {"birds":10000,"trails":false,"physicsMeanMs":21.748,"drawMeanMs":197.323,"frameIntervalMeanMs":219.310,"frameIntervalP95Ms":242.1},
+    {"birds":10000,"trails":true,"physicsMeanMs":21.938,"drawMeanMs":198.464,"frameIntervalMeanMs":220.667,"frameIntervalP95Ms":248.0}
+  ]
+}
