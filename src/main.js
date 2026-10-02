@@ -30,18 +30,18 @@ async function recoverGPU(error){
  $('metrics').title='Graphics acceleration unavailable; flock restarted with CPU rendering.';
  requestAnimationFrame(animate);
 }
-async function animate(now){
+function animate(now){
  if(engine.runtime?.lost){recoverGPU(new Error('Graphics device lost'));return;}
  try{
  const elapsed=Math.min((now-last)/1000,.1);last=now;
  if(!paused&&!exporting){accumulator+=elapsed*world.settings.speed;let steps=0;while(accumulator>=1/120&&steps<24){world.step(1/120);accumulator-=1/120;steps++;}}
  if(!exporting){
   engine.render(world,style);
-  // Bound the GPU queue: on slower hardware, do not accumulate stale frames.
-  if(engine.runtime)await engine.runtime.device.queue.onSubmittedWorkDone();
+  // Let presentation pace live rendering. Waiting for GPU completion here
+  // adds ~100 ms of notification latency per frame in Firefox.
  }
  frames++;
- if(now-meter>750){$('metrics').textContent=`${world.count.toLocaleString()} BIRDS / ${Math.round(frames*1000/(now-meter))} FPS`;meter=now;frames=0;}
+ if(now-meter>750){$('metrics').textContent=`${world.count.toLocaleString()} BIRDS / ${Math.round(frames*1000/(now-meter))} FPS / ${engine.backend==='webgpu'?'GPU':'CPU'}`;meter=now;frames=0;}
  requestAnimationFrame(animate);
  }catch(error){if(engine.backend==='webgpu')recoverGPU(error);else throw error;}
 }requestAnimationFrame(animate);

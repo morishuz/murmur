@@ -25,7 +25,7 @@ Original Canvas bird drawing alone cost about 197–198 ms/frame at 10,000 birds
 - Grid construction uses atomic linked cell lists without fixed per-cell capacity or neighbour truncation. Separate compute passes establish dependencies before steering and integration.
 - Bird state remains on the GPU for simulation and instanced rendering. GPU trail masks preserve the existing finite-lifetime batch approach. Video rendering clones state and trail textures on the GPU, without downloading bird positions each frame.
 - GPU and CPU are numerically close but not bit-for-bit identical. GPU float precision and atomic neighbour order can lead to divergent trajectories over time in this interacting system.
-- The live loop waits for submitted GPU work before scheduling another frame, preventing a growing backlog on slower devices.
+- The live loop follows requestAnimationFrame without a per-frame GPU completion fence. Firefox completion notifications can add about 100 ms even when the GPU work is quick. Export still synchronizes before encoding.
 - Browser support is detected at startup. Missing WebGPU or initialization failure selects the CPU renderer. Device loss restarts the flock on the CPU with the current population, seed and settings; existing trails are cleared. A device loss during export produces an error so the user can retry.
 - Neighbour aggregation was considered but not enabled: exact-neighbour GPU work remained comfortably within the 60 FPS budget at 10,000 birds. Changing the interaction model would not be justified by these measurements. Revisit only if slower target devices or larger populations require it.
 
@@ -51,3 +51,11 @@ The original baseline is recorded in `diagnostics/baseline.json` and corresponds
 - CPU and GPU exports, with trails off and on, were encoded and decoded as both MP4 and WebM. All eight one-second exports contained 24 frames with increasing timestamps, the expected duration, and visible birds. Trail-enabled first frames contained the existing trail history.
 - Cancellation and live-scene isolation passed on both backends. CPU fallback rendering and device-loss detection passed.
 - An additional 10,000-bird GPU export with trails at 1920 × 1200, 60 FPS and 2× speed encoded and decoded all 60 frames for one second, preserving the live scene time.
+
+## Firefox regression and fix
+
+A follow-up test in the user’s Firefox 156 session exposed a browser-specific regression: awaiting `queue.onSubmittedWorkDone()` before requesting the next animation frame introduced an average 104.2 ms completion-notification delay. At 1,000 birds, the frame interval averaged 104.5 ms with that wait and 16.6 ms without it. The live loop no longer waits on that notification. GPU command ordering still orders simulation and drawing; video export retains its explicit synchronization.
+
+The original Chromium results above did not establish Firefox performance. In particular, the fenced diagnostic’s completed-work time includes browser notification latency and is not a pure GPU execution-time measurement. The live FPS counter now also identifies GPU or CPU rendering. `/diagnostics/capabilities.html` reproduces the fenced/unfenced comparison and reports WebGPU initialization failures.
+
+After removing the live fence, the actual Firefox app displayed 60 FPS at both 1,000 and 10,000 birds, including 10,000 with trails enabled. This was verified in the user's localhost session, not inferred from the Chromium benchmark.

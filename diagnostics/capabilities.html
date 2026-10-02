@@ -1,0 +1,26 @@
+<!doctype html><meta charset="utf-8"><title>Murmur graphics check</title><h1>Murmur graphics check</h1><pre style="white-space:pre-wrap"></pre><script type="module">
+import {getGPU} from '../src/gpu/runtime.js';
+import {Flock} from '../src/flock.js';
+import {GPUFlock} from '../src/gpu/flock.js';
+import {GPURenderer} from '../src/gpu/renderer.js';
+const out=document.querySelector('pre');const log=value=>out.textContent+=JSON.stringify(value,null,2)+'\n';
+const warn=console.warn;console.warn=(...args)=>{log({warning:args.map(a=>a?.message||String(a))});warn(...args);};
+log({browser:navigator.userAgent,secureContext:isSecureContext,webgpuExposed:!!navigator.gpu});
+try {const runtime=await getGPU();log({activeBackend:runtime?'webgpu':'cpu'});
+if(runtime){
+ const canvas=document.createElement('canvas');canvas.width=800;canvas.height=500;document.body.append(canvas);
+ const scene=new GPUFlock(runtime,new Flock(1000));const renderer=new GPURenderer(runtime,canvas);
+ const style={background:'#e8ece7',birds:'#263c35',size:4,trails:false};
+ for(const fenced of [true,false]){
+  const intervals=[],waits=[];let last=performance.now();
+  for(let i=0;i<40;i++){
+   await new Promise(requestAnimationFrame);const start=performance.now();
+   scene.step(1/120);scene.step(1/120);renderer.render(scene,style);
+   const submitted=performance.now();if(fenced)await runtime.device.queue.onSubmittedWorkDone();
+   if(i>=10){intervals.push(start-last);waits.push(performance.now()-submitted);}last=start;
+  }
+  log({fenced,frameIntervalMean:intervals.reduce((a,b)=>a+b)/intervals.length,completionWaitMean:waits.reduce((a,b)=>a+b)/waits.length});
+ }
+ await runtime.device.queue.onSubmittedWorkDone();renderer.destroy();scene.destroy();
+}}catch(error){log({error:error.message});}
+</script>
